@@ -451,6 +451,32 @@ sleep(void *chan, struct spinlock *lk)
   }
 }
 
+void
+sleepcurrent()
+{
+  struct proc *p = myproc();
+  if(p == 0)
+    panic("sleep");
+  acquire(&ptable.lock);  
+  p->state = SLEEPING;
+  sched();
+
+  release(&ptable.lock);
+}
+
+void
+wakeupprocess(struct proc* p)
+{
+  if(p == 0)
+    panic("wakeup");
+  acquire(&ptable.lock);  
+  p->state = RUNNABLE;
+  release(&ptable.lock);
+  acquire(&tickslock);  
+  sleep(&ticks, &tickslock);
+  release(&tickslock);  
+}
+
 //PAGEBREAK!
 // Wake up all processes sleeping on chan.
 // The ptable lock must be held.

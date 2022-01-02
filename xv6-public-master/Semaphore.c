@@ -14,34 +14,30 @@ struct Semaphore semaphore[NUMSEMAPHORE];
 void sem_init(uint i, uint v)
 {
     semaphore[i].index = i;
+    semaphore[i].value = 0;
     semaphore[i].capacity = v;
-    initlock(&semaphore[i].lock, (char *)i); // unique name
     semaphore[i].first = semaphore[i].last = 0;
     return;
 }
 
 void sem_acquire(uint i)
 {
-    acquire(&semaphore[i].lock);
-    while (semaphore[i].capacity == 0)
+    xchg(&semaphore[i].value, semaphore[i].value + 1);
+    if (semaphore[i].value > semaphore[i].capacity)
     {
-        semaphore[i].procs[semaphore[i].last] = proc;
+        semaphore[i].procs[semaphore[i].last] = myproc();
         semaphore[i].last = (semaphore[i].last + 1) % NPROC;
-        sleep(proc, &semaphore[i].lock);
+        sleepcurrent();
     }
-    semaphore[i].capacity -= 1;
-    release(&semaphore[i].lock);
 }
 
 void sem_release(uint i)
 {
-    acquire(&semaphore[i].lock);
-    semaphore[i].capacity += 1;
-    if (semaphore[i].procs[semaphore[i].first])
+    xchg(&semaphore[i].value, semaphore[i].value - 1);
+    if(semaphore[i].procs[semaphore[i].first])
     {
-        wakeup(semaphore[i].procs[semaphore[i].first]);
+        wakeupprocess(semaphore[i].procs[semaphore[i].first]);
         semaphore[i].procs[semaphore[i].first] = 0;
         semaphore[i].first = (semaphore[i].first + 1) % NPROC;
     }
-    release(&semaphore->lock);
 }

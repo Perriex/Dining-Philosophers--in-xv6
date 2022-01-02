@@ -1,4 +1,3 @@
-#include <time.h>
 #include "types.h"
 #include "stat.h"
 #include "user.h"
@@ -9,48 +8,47 @@
 #define THINKING 2
 #define HUNGRY 3
 
-int chops[NUM] = {-1, -1, -1, -1, -1};
-int waiting[NUM] = {5000, 3000, 1000, 4000, 2000};
-int states[NUM] = {0};
+int waiting[NUM] = {100, 100, 100, 100, 100};
 
 void return_chops(int id)
 {
-    int left = ((id - 1) + NUM) % NUM;
+    int left = id;
     int right = (id + 1) % NUM;
-    chops[left] = -1;
-    chops[right] = -1;
-    states[id] = THINKING;
     sem_release(left);
     sem_release(right);
 }
 void eat(int id)
 {
     int eating = waiting[id];
-    printf(1, "Philosopher %d is eating for %d seconds\n", id, eating);
+    printf(1, "%d \n", id + 1);
     sleep(eating);
-    printf(1, "Philosopher %d finished %d\n", id);
     return;
 }
 
 void pickup_chops(int id)
 {
-    int left = ((id - 1) + NUM) % NUM;
+    int left = id;
     int right = (id + 1) % NUM;
-    states[id] = HUNGRY;
-    sem_acquire(left);
-    sem_acquire(right);
-    states[id] = EATING;
-    chops[left] = id;
-    chops[right] = id;
+ 
+    if(left < right)
+    {
+        sem_acquire(left);
+        sem_acquire(right);
+    }
+    else
+    {
+        sem_acquire(right);
+        sem_acquire(left);
+    }
     return;
 }
 
 void think(int id)
 {
     int think = waiting[id];
-    printf(1, "Philosopher %d is thinking for %d seconds\n", id, think);
+    //printf(1, "Philosopher %d is thinking for %d seconds\n", id, think);
     sleep(think);
-    printf(1, "Philosopher %d finish thinking\n", id);
+    //printf(1, "Philosopher %d finish thinking\n", id);
     return;
 }
 
@@ -70,7 +68,7 @@ int main(void)
 {
     for (int i = 0; i < NUM; i++)
     {
-        sem_init(i, 5);
+        sem_init(i, 1);
     }
 
     // fork 5 childs and execute
