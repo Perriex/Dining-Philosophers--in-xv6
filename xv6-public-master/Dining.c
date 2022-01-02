@@ -10,7 +10,7 @@
 #define HUNGRY 3
 
 int chops[NUM] = {-1, -1, -1, -1, -1};
-int waiting[NUM] = {2, 3, 1, 3, 2};
+int waiting[NUM] = {2000, 3000, 1000, 3000, 2000};
 int states[NUM] = {0};
 
 void return_chops(int id)
