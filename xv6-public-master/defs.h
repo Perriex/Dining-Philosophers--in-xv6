@@ -10,6 +10,11 @@ struct sleeplock;
 struct stat;
 struct superblock;
 
+// Semaphore.c
+void            sem_init(uint,uint); // added 
+void            sem_acquire(uint);   // added
+void            sem_release(uint);   // added
+
 // bio.c
 void            binit(void);
 struct buf*     bread(uint, uint);

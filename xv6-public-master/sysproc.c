@@ -89,3 +89,34 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// added below sys for semaphore  
+
+int
+sys_sem_init(void)
+{
+  int i;
+  int v;
+  argint(0, &i);
+  argint(1,&v);
+  sem_init(i,v);
+  return 0;
+}
+
+int
+sys_sem_acquire(void)
+{
+  int i;
+  argint(0,&i);
+  sem_acquire(i);
+  return 0;
+}
+
+int 
+sys_sem_release(void)
+{
+  int i;
+  argint(0,&i);
+  sem_release(i);
+  return 0;
+}

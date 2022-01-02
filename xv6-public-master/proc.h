@@ -13,6 +13,10 @@ struct cpu {
 extern struct cpu cpus[NCPU];
 extern int ncpu;
 
+// like linux pthreads -> thread local variables implement.
+extern struct cpu *cpu asm("%gs:0");       // added - current cpu
+extern struct proc *proc asm("%gs:4");     // added - current proc
+
 //PAGEBREAK: 17
 // Saved registers for kernel context switches.
 // Don't need to save all the segment registers (%cs, etc),
