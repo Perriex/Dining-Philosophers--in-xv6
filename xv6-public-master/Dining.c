@@ -10,7 +10,7 @@
 #define HUNGRY 3
 
 int chops[NUM] = {-1, -1, -1, -1, -1};
-int waiting[NUM] = {2000, 3000, 1000, 3000, 2000};
+int waiting[NUM] = {5000, 3000, 1000, 4000, 2000};
 int states[NUM] = {0};
 
 void return_chops(int id)
@@ -19,11 +19,7 @@ void return_chops(int id)
     int right = (id + 1) % NUM;
     chops[left] = -1;
     chops[right] = -1;
-
-    // lock
     states[id] = THINKING;
-    printf(1, "Philosopher id has put down forks\n", id);
-    // release
     sem_release(left);
     sem_release(right);
 }
@@ -41,14 +37,11 @@ void pickup_chops(int id)
     int left = ((id - 1) + NUM) % NUM;
     int right = (id + 1) % NUM;
     states[id] = HUNGRY;
-    // lock semaphore
     sem_acquire(left);
     sem_acquire(right);
     states[id] = EATING;
     chops[left] = id;
     chops[right] = id;
-    printf(1, "Philosopher %d is eating now \n", id);
-    // release lock
     return;
 }
 

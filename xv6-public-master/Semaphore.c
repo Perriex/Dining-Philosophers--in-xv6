@@ -17,6 +17,7 @@ void sem_init(uint i, uint v)
     semaphore[i].capacity = v;
     initlock(&semaphore[i].lock, (char *)i); // unique name
     semaphore[i].first = semaphore[i].last = 0;
+    return;
 }
 
 void sem_acquire(uint i)
