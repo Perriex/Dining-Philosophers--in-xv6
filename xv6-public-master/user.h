@@ -24,6 +24,11 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
+// semaphore sys
+int sem_init(uint,uint);
+int sem_acquire(uint);
+int sem_release(uint);
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
