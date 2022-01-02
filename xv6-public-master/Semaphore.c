@@ -16,6 +16,8 @@ void sem_init(uint i, uint v)
     semaphore[i].index = i;
     semaphore[i].capacity = v;
     initlock(&semaphore[i].lock, (char *)i); // unique name
+    for (int j = 0; j < NPROC; j++)
+        semaphore[i].procs[j] = 0;
     semaphore[i].first = semaphore[i].last = 0;
     return;
 }
