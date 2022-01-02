@@ -15,13 +15,7 @@ void sem_init(uint i, uint v)
 {
     semaphore[i].index = i;
     semaphore[i].capacity = v;
-    char name[6];
-    snprintf(name, 6, "sema%d", i);
-    initlock(&semaphore[i].lock, name); // unique name
-    for (int i = 0; i < NPROC; i++)
-    {
-        semaphore[i].procs[i] = 0; // initial procs
-    }
+    initlock(&semaphore[i].lock, (char *)i); // unique name
     semaphore[i].first = semaphore[i].last = 0;
 }
 

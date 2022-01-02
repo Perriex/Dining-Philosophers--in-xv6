@@ -9,4 +9,4 @@ typedef struct Semaphore
     unsigned int first;
     unsigned int last;
     unsigned int capacity;
-} semaphore;
+} Semaphore;

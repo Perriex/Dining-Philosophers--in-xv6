@@ -25,9 +25,9 @@ int sleep(int);
 int uptime(void);
 
 // semaphore sys
-int sem_init(void);
-int sem_acquire(void);
-int sem_release(void);
+int sem_init(uint,uint);
+int sem_acquire(uint);
+int sem_release(uint);
 
 // ulib.c
 int stat(const char*, struct stat*);
